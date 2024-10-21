@@ -1,0 +1,15 @@
+[project]
+name = "order-book-htmx"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.2",
+    "jinja2>=3.1.4",
+    "uvicorn>=0.32.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

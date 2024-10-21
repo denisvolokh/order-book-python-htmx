@@ -1,0 +1,14 @@
+{% for order in order_book.asks %}
+<tr class="table-danger">
+    <td class="ask">Ask</td>
+    <td>{{ order.price }}</td>
+    <td>{{ order.quantity }}</td>
+</tr>
+{% endfor %}
+{% for order in order_book.bids %}
+<tr class="table-success">
+    <td class="bid">Bid</td>
+    <td>{{ order.price }}</td>
+    <td>{{ order.quantity }}</td>
+</tr>
+{% endfor %}
