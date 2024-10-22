@@ -1,14 +1,40 @@
-{% for order in order_book.asks %}
-<tr class="table-danger">
-    <td class="ask">Ask</td>
-    <td>{{ order.price }}</td>
-    <td>{{ order.quantity }}</td>
+{% for i in range(10) %}
+<tr class="sell-row">
+    <td class="buy">
+        <!-- Empty buy column for ask rows -->
+    </td>
+    <td class="price">
+        <!-- Display ask prices for the first 10 rows -->
+        {{ order_book.asks[i].price }}
+    </td>
+    <td class="sell">
+        <!-- Display ask quantities -->
+        {{ order_book.asks[i].quantity | int }}
+    </td>
 </tr>
 {% endfor %}
-{% for order in order_book.bids %}
-<tr class="table-success">
-    <td class="bid">Bid</td>
-    <td>{{ order.price }}</td>
-    <td>{{ order.quantity }}</td>
+
+<!-- Current price row -->
+<tr class="current-price">
+    <td></td> <!-- Empty buy column for current price row -->
+    <td class="price">
+        {{ order_book.current_price }}
+    </td>
+    <td></td> <!-- Empty sell column for current price row -->
+</tr>
+
+{% for i in range(10) %}
+<tr class="buy-row">
+    <td class="buy">
+        <!-- Display bid quantities -->
+        {{ order_book.bids[i].quantity | int }}
+    </td>
+    <td class="price">
+        <!-- Display bid prices for the second 10 rows -->
+        {{ order_book.bids[i].price }}
+    </td>
+    <td class="sell">
+        <!-- Empty sell column for bid rows -->
+    </td>
 </tr>
 {% endfor %}
