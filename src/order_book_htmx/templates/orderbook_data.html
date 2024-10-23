@@ -1,40 +1,36 @@
+<!-- Render the Ask rows, Sell column, right-aligned fill -->
 {% for i in range(10) %}
 <tr class="sell-row">
-    <td class="buy">
-        <!-- Empty buy column for ask rows -->
-    </td>
-    <td class="price">
-        <!-- Display ask prices for the first 10 rows -->
-        {{ order_book.asks[i].price }}
-    </td>
+    <td></td>
+    <td class="price">{{ asks[i].price }}</td>
     <td class="sell">
-        <!-- Display ask quantities -->
-        {{ order_book.asks[i].quantity | int }}
+        <div style="position: relative; width: 100%; height: 100%; background-color: #f2e0e0;">
+            <!-- Right-aligned fill for the Sell column -->
+            <div style="position: absolute; right: 0; background-color: #f28b82; width: {{ asks[i].quantity / max_ask_quantity * 100 }}%; height: 100%;"></div>
+            <span style="position: relative; z-index: 1;">{{ asks[i].quantity }}</span>
+        </div>
     </td>
 </tr>
 {% endfor %}
 
-<!-- Current price row -->
+<!-- Render the Current Price row -->
 <tr class="current-price">
-    <td></td> <!-- Empty buy column for current price row -->
-    <td class="price">
-        {{ order_book.current_price }}
-    </td>
-    <td></td> <!-- Empty sell column for current price row -->
+    <td></td>
+    <td class="price">{{ current_price }}</td>
+    <td></td>
 </tr>
 
+<!-- Render the Bid rows, Buy column, left-aligned fill -->
 {% for i in range(10) %}
 <tr class="buy-row">
     <td class="buy">
-        <!-- Display bid quantities -->
-        {{ order_book.bids[i].quantity | int }}
+        <div style="position: relative; width: 100%; height: 100%; background-color: #e0f2e0;">
+            <!-- Left-aligned fill for the Buy column -->
+            <div style="position: absolute; left: 0; background-color: #81c995; width: {{ bids[i].quantity / max_bid_quantity * 100 }}%; height: 100%;"></div>
+            <span style="position: relative; z-index: 1;">{{ bids[i].quantity }}</span>
+        </div>
     </td>
-    <td class="price">
-        <!-- Display bid prices for the second 10 rows -->
-        {{ order_book.bids[i].price }}
-    </td>
-    <td class="sell">
-        <!-- Empty sell column for bid rows -->
-    </td>
+    <td class="price">{{ bids[i].price }}</td>
+    <td></td>
 </tr>
 {% endfor %}

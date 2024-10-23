@@ -13,29 +13,36 @@ async def orderbook_page(request: Request):
 
 
 @app.get("/orderbook/update", response_class=HTMLResponse)
-async def orderbook_update(request: Request):
-    # Generate random order book data
+async def update_table(request: Request):
+    # Bids: Higher price -> Lower quantity
     bids = [
-        {"price": round(random.uniform(100, 105), 2), "quantity": random.randint(1, 50)}
-        for _ in range(10)
+        {"price": round(random.uniform(100 + i * 0.5, 105), 2), "quantity": random.randint(10, 100 - i * 9)}
+        for i in range(10)
     ]
+
+    # Asks: Lower price -> Lower quantity
     asks = [
-        {"price": round(random.uniform(106, 110), 2), "quantity": random.randint(1, 50)}
-        for _ in range(10)
+        {"price": round(random.uniform(105 + i * 0.5, 110), 2), "quantity": random.randint(10 + i * 9, 100)}
+        for i in range(10)
     ]
 
     bids = sorted(bids, key=lambda x: x["price"], reverse=True)
     asks = sorted(asks, key=lambda x: x["price"], reverse=True)
 
-    # Calculate current price (midpoint between highest bid and lowest ask)
-    highest_bid = bids[-1]["price"] if bids else None
-    lowest_ask = asks[-1]["price"] if asks else None
-    current_price = None
-    if highest_bid and lowest_ask:
-        current_price = round((highest_bid + lowest_ask) / 2, 2)
+    current_price = round((bids[0]["price"] + asks[0]["price"]) / 2, 2)
 
-    order_book = {"bids": bids, "asks": asks, "current_price": current_price}
+    # Calculate maximum quantities for both bids and asks
+    max_bid_quantity = max(bid["quantity"] for bid in bids) if bids else 1
+    max_ask_quantity = max(ask["quantity"] for ask in asks) if asks else 1
 
     return templates.TemplateResponse(
-        "orderbook_data.html", {"request": request, "order_book": order_book}
+        "orderbook_data.html",
+        {
+            "request": request,
+            "bids": bids,
+            "asks": asks,
+            "current_price": current_price,
+            "max_bid_quantity": max_bid_quantity,
+            "max_ask_quantity": max_ask_quantity,
+        },
     )
