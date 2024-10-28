@@ -1,4 +1,3 @@
-<!-- Render the Ask rows, Sell column, right-aligned fill -->
 {% for i in range(10) %}
 <tr class="sell-row">
     <td></td>
@@ -12,15 +11,11 @@
     </td>
 </tr>
 {% endfor %}
-
-<!-- Render the Current Price row -->
 <tr class="current-price">
     <td></td>
     <td class="price">{{ current_price }}</td>
     <td></td>
 </tr>
-
-<!-- Render the Bid rows, Buy column, left-aligned fill -->
 {% for i in range(10) %}
 <tr class="buy-row">
     <td class="buy">

@@ -3,7 +3,9 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 import asyncio
-import json
+from sse_starlette import ServerSentEvent
+from sse_starlette.sse import EventSourceResponse
+
 
 
 app = FastAPI()
@@ -54,21 +56,33 @@ async def update_table(request: Request):
     data = generate_bid_ask_data()
 
     return templates.TemplateResponse(
-        request,
-        "orderbook_update.html",
-        **data
+        "orderbook_data.html",
+        {
+            "request": request,
+            **data
+        }
     )
 
 
 async def event_generator():
+    template = templates.get_template("orderbook_data.html")
     while True:
         data = generate_bid_ask_data()
 
-        yield f"data: {json.dumps(data)}\n\n"  # Send JSON data as SSE
+        rendered_data = template.render(
+            bids=data["bids"],
+            asks=data["asks"],
+            current_price=data["current_price"],
+            max_bid_quantity=data["max_bid_quantity"],
+            max_ask_quantity=data["max_ask_quantity"]
+        )
 
-        await asyncio.sleep(1)  # Adjust the interval as needed
+        yield ServerSentEvent(rendered_data)
+
+        await asyncio.sleep(1)
 
 
 @app.get("/orderbook/stream")
-async def orderbook_stream():
-    return StreamingResponse(event_generator(), media_type="text/event-stream")
+async def orderbook_stream(request: Request):
+    # return StreamingResponse(event_generator(request), media_type="text/event-stream")
+    return EventSourceResponse(event_generator())
