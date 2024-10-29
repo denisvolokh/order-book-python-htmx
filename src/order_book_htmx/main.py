@@ -84,5 +84,4 @@ async def event_generator():
 
 @app.get("/orderbook/stream")
 async def orderbook_stream(request: Request):
-    # return StreamingResponse(event_generator(request), media_type="text/event-stream")
     return EventSourceResponse(event_generator())
